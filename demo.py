@@ -107,7 +107,7 @@ if __name__ == "__main__":
             a {FileCommand.CREATE}                  # Also create a directory named a.
         """)
 
-        # For now, they all must be directories, are ordinary files. TODO: Ideally there should not be this limitation.
+        # For now, they all must be directories, or all must be ordinary files. TODO: Ideally there should not be this limitation.
         # e.g. Instead of ["a", "b.txt", "c.txt"], write 2 lines: "a" and ["b.txt", "c.txt"].
 
         # Another example:
@@ -117,7 +117,7 @@ if __name__ == "__main__":
             {[f"{letter}.txt" for letter in ("A", "B", "C")]} {FileCommand.CREATE_IF_ABSENT}    # A.txt, B.txt, C.txt inside ../abc2
             {[i for i in range(1, 10)]} {FileCommand.CREATE_IF_ABSENT}                          # 1, 2, 3, ..., 9 inside ../abc2
             a {FileCommand.CREATE_IF_ABSENT}                                                    # a inside ../abc2
-                {[i for i in range(1, 10)]} {FileCommand.CREATE_IF_ABSENT}                      # 
+                {[i for i in range(1, 10)]} {FileCommand.CREATE_IF_ABSENT}                      # 1, 2, 3, ..., 9 inside ../abc2/a
                 {FileStructureCommand.REMOVE_EVERYTHING_ELSE}
         """)
 
@@ -126,13 +126,13 @@ if __name__ == "__main__":
         abc = FileStructure(f"""
         ../abc3 {FileCommand.CREATE_IF_ABSENT}
             {[i for i in range(1, 10)]} {FileCommand.CREATE_IF_ABSENT}
-                a {FileCommand.CREATE_IF_ABSENT}                                # There will be "a" in all those directories.
-                {["x", "y", "z"]} {FileCommand.CREATE_IF_ABSENT}      # i.e. There will be these three in all those directories.
+                a {FileCommand.CREATE_IF_ABSENT}                        # There will be "a" in all those directories.
+                {["x", "y", "z"]} {FileCommand.CREATE_IF_ABSENT}        # i.e. There will be these three in all those directories.
         """)
 
         example_path = abc / "1" / "results.txt"
 
-        # Maybe one of them has an extra content:
+        # Maybe one of them has extra content:
 
         abc = FileStructure(f"""
         ../abc4 {FileCommand.CREATE_IF_ABSENT}
@@ -140,5 +140,5 @@ if __name__ == "__main__":
                 a {FileCommand.CREATE_IF_ABSENT}                            # There will be "a" in all those directories.
                 {["x", "y", "z"]} {FileCommand.CREATE_IF_ABSENT}            # i.e. There will be these three in all those directories.
             1 {FileCommand.PRESENT}
-                extra_dir {FileCommand.CREATE}
+                extra_dir {FileCommand.CREATE}                              # One of those 9 directories will have one more sub-directory named extra-dir.
         """)
