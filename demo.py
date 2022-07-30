@@ -45,6 +45,21 @@ if __name__ == "__main__":
         z = xyz / "z"
         a = abc / a_filename
         b = abc / "b.mp4"
+        # Note that abc and xyz are not Path objects. Use abc.path() and xyz.path() to obtain Path objects.
+
+        # Short summary:
+
+        # (1) For ordinary files:
+        # using indexing or division brings a Path:
+        # e.g. abc["x.txt"] is a Path, abc / "x.txt" is also a Path.
+
+        # (2) For directories: 
+        # indexing brings a FileStructure, division brings a Path:
+        # e.g. abc["xyz"] is a FileStructure but abc / "xyz" is a Path.
+        # Alternatively, abc["xyz"].path() is also a Path.
+        # This of course can be used for getting the main directory as well: abc.path()
+
+        # Some details:
 
         # Indexing returns a Path (if it is an ordinary file) or a FileStructure (if it is a directory).
         # e.g. abc is a FileStructure. So is abc["xyz"]. So is abc["xyz"]["z"].
@@ -90,7 +105,7 @@ if __name__ == "__main__":
                 b.png {FileCommand.ABSENT}
                 c {FileCommand.PRESENT}
                     d {FileCommand.CREATE_IF_ABSENT}
-                    e {FileCommand.CREATE}                  # After this d may not be empty, but e will be empty for sure.
+                    e {FileCommand.CREATE}                  # After this, d may not be empty, but e will be empty for sure.
                     f {FileCommand.CREATE_IF_ABSENT}                      
                     {FileStructureCommand.THAT_IS_ALL}
                 g {FileCommand.CREATE}
@@ -107,8 +122,9 @@ if __name__ == "__main__":
             a {FileCommand.CREATE}                  # Also create a directory named a.
         """)
 
-        # For now, they all must be directories, or all must be ordinary files. TODO: Ideally there should not be this limitation.
-        # e.g. Instead of ["a", "b.txt", "c.txt"], write 2 lines: "a" and ["b.txt", "c.txt"].
+        # For now, they all must be directories, or all must be ordinary files. 
+        # e.g. Instead of ["a", 1, 5, 10], write 2 lines: "a" and [1, 5, 10].
+        # TODO: Ideally there should not be this limitation.
 
         # Another example:
 
